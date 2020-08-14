@@ -1,33 +1,40 @@
-public class Dinglemouse {
+import java.util.*;
 
-  static char[][] arr = {{'a','b','c','d','e','1','2','3'},
-                    {'f','g','h','i','j','4','5','6'},
-                    {'k', 'l', 'm', 'n','o','7','8','9'},
-                    {'p', 'q', 'r', 's', 't', '.', '@', '0'},
-                    {'u', 'v', 'w', 'x', 'y', 'z', '_', '/'}};
-  static int[] currPos = {0, 0};
-
-  public static int tvRemote(final String word) {
-    currPos[0] = 0;
-    currPos[1] = 0;
-    int clicks = 0;
-    for(int i = 0; i < word.length(); i++){
-      clicks += findPos(word.charAt(i));
-    }
-    return clicks;
-  }
+public class CircularList<T> {
   
-  public static int findPos(char c){
-    for(int y = 0; y < 6; y++){
-      for(int x = 0; x < 8; x++){
-        if(arr[y][x] == c){
-          int res = Math.abs(currPos[0] - x) + Math.abs(currPos[1] - y) + 1;
-          currPos[0] = x;
-          currPos[1] = y;
-          return res;
-        } 
+  private Integer actualInd;
+  private List<T> eleList;
+
+    public CircularList(final T... elements) {
+      if(elements.length <= 0){
+        throw new NullPointerException("Exception");
+      }else{
+        eleList = new ArrayList<>();
+        for(int i = 0; i < elements.length; i++){
+          eleList.add(elements[i]);
+        }
       }
     }
-    return 0;
-  } 
+
+    T next() {
+      if(actualInd == null){
+        actualInd = 0;
+        return eleList.get(0);
+      }else{
+        actualInd = (actualInd + 1) % eleList.size();
+        return eleList.get(actualInd);
+      }
+    }
+
+    T prev() {
+      if(actualInd == null){
+        actualInd = 0;
+      }
+      if(actualInd == 0){
+        actualInd = eleList.size()-1;
+      }else{
+        actualInd--;
+      }
+      return eleList.get(actualInd);
+    }
 }
